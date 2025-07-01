@@ -34,9 +34,12 @@ public class gameController : MonoBehaviour
 
             int indiceRandom = Random.Range(0,3);
             GameObject obstaculo = Instantiate(prefabObstacle, pistas[indiceRandom].transform.position + offsetZ, pistas[1].transform.rotation);
-            obstaculo.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -5);
+            obstaculo.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, -5);
 
         }
+
+
+       
        
 
     }
