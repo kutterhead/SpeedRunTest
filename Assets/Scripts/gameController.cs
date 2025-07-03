@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class gameController : MonoBehaviour
     // Start is called before the first frame update
     public Transform player;
     public Transform[] pistas;
-    public GameObject prefabObstacle;
+    public GameObject[] prefabObstacle;
 
     [SerializeField]int indicePistaActual = 0;
 
@@ -24,6 +25,13 @@ public class gameController : MonoBehaviour
     Rigidbody rb;
     [SerializeField] bool isMoving = true;
     [SerializeField] bool isGrounded = false;
+    [SerializeField] int vidas = 3;
+    [SerializeField] int puntos = 0;
+
+    public static Action cajaRecolectada;
+    public static Action vidaPerdida;
+    public static Action<int> cajaRecolectadavalor;
+    public static Action<int> vidaPerdidavalor;
     void Start()
     {
         indicePistaActual = 1;
@@ -44,8 +52,8 @@ public class gameController : MonoBehaviour
             time = 0;
 
 
-            int indiceRandom = Random.Range(0, 3);
-            GameObject obstaculo = Instantiate(prefabObstacle, pistas[indiceRandom].transform.position + offsetZ, pistas[1].transform.rotation);
+            int indiceRandom = UnityEngine.Random.Range(0, 3);
+            GameObject obstaculo = Instantiate(prefabObstacle[UnityEngine.Random.Range(0, prefabObstacle.Length)], pistas[indiceRandom].transform.position + offsetZ, pistas[1].transform.rotation);
             obstaculo.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, -10);
 
         }
@@ -121,7 +129,7 @@ public class gameController : MonoBehaviour
 
     IEnumerator mueveIDerecha(int index)
     {
-        Debug.Log("pulsado D " + index);
+       // Debug.Log("pulsado D " + index);
 
         isMoving = true;
         while (true)
@@ -153,7 +161,41 @@ public class gameController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         isGrounded = true;
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
+
+        if (other.gameObject.CompareTag("Item"))
+        {
+            puntos++;
+            Destroy(other.gameObject);
+            Debug.Log($"Caja recolectada {puntos}.");
+            cajaRecolectada?.Invoke();
+            cajaRecolectadavalor?.Invoke(puntos);
+        }
+        else if (other.gameObject.CompareTag("Obstacle"))
+            {
+                vidas--;
+                Destroy(other.gameObject);
+                Debug.Log($"hemos perdido vida {vidas}.");
+            vidaPerdida?.Invoke();
+            vidaPerdidavalor?.Invoke(vidas);
+            if (vidas < 0)
+            {
+                Debug.Log($"Game Over");
+
+            }
+        }
+
     }
+
+    public void restaVida()
+    {
+
+    }
+    public void sumaPuntos()
+    {
+
+
+    }
+
 
 }

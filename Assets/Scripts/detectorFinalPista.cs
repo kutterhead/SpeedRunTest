@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,10 @@ using UnityEngine;
 public class detectorFinalPista : MonoBehaviour
 {
     // Start is called before the first frame update
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -15,11 +17,5 @@ public class detectorFinalPista : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log("trigger obstacle.");
-        Destroy(other.gameObject);
-    }
-
 
 }
